@@ -1,0 +1,38 @@
+{
+  "name": "@replit/alcor",
+  "version": "0.0.1",
+  "description": "Serialize javascript objects",
+  "files": [
+    "/dist"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "lint": "eslint . --ext .js,.ts",
+    "build": "tsc",
+    "build:browser": "yarn clean && yarn build && parcel build src.browser/index.js -d dist.browser --out-file alcor.js",
+    "dev": "yarn build && (yarn build -- -w & parcel src.browser/index.html)",
+    "prepublishOnly": "yarn clean && yarn build",
+    "clean": "rm -rf dist dist.browser",
+    "docs": "typedoc --out docs --name alcor --includeDeclarations --excludeExternals src/channel.ts src/client.ts node_modules/@replit/protocol/index.d.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "faris@repl.it",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.3.0",
+    "@typescript-eslint/parser": "^2.3.0",
+    "eslint": "^6.4.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-prettier": "^6.3.0",
+    "eslint-import-resolver-typescript": "^1.1.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-react": "^7.14.3",
+    "parcel": "^1.12.4",
+    "prettier": "^1.18.2",
+    "typedoc": "^0.15.0",
+    "typescript": "^3.6.4"
+  }
+}
