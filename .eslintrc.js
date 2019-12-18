@@ -42,4 +42,20 @@ module.exports = {
   globals: {
     BigInt: true,
   },
+  overrides: [
+    {
+      files: ['**/__tests__/**/*.+(ts|tsx|js)'],
+      env: {
+        'jest/globals': true,
+      },
+      plugins: ['jest'],
+      rules: {
+        'jest/no-disabled-tests': 'warn',
+        'jest/no-focused-tests': 'error',
+        'jest/no-identical-title': 'error',
+        'jest/prefer-to-have-length': 'warn',
+        'jest/valid-expect': 'error',
+      },
+    },
+  ],
 };
