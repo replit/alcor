@@ -185,6 +185,55 @@ export default (serialized: Record<number, Types>, global: Global = window) => {
 
         break;
 
+      case 'domnode': {
+        const parser = new window.DOMParser();
+
+        const document = parser.parseFromString(o.value, 'application/xml');
+        hydratedVal = document.firstChild;
+
+        if (!hydratedVal) {
+          break;
+        }
+
+        if (hydratedVal instanceof window.Element) {
+          hydratedVal.removeAttribute('xmlns');
+        }
+
+        break;
+      }
+
+      case 'htmlcollection': {
+        const root = window.document.createDocumentFragment();
+
+        for (const elId of o.value) {
+          const el = getHydratedValue(elId);
+
+          if (el instanceof window.Element) {
+            root.appendChild(el);
+          }
+        }
+
+        hydratedVal = root.children;
+
+        break;
+      }
+
+      case 'nodelist': {
+        const root = window.document.createDocumentFragment();
+
+        for (const elId of o.value) {
+          const el = getHydratedValue(elId);
+
+          if (el instanceof window.Element) {
+            root.appendChild(el);
+          }
+        }
+
+        hydratedVal = root.childNodes;
+
+        break;
+      }
+
       default:
         assertNever(o);
     }

@@ -210,6 +210,64 @@ export default (entry: unknown, global: Global = window): Record<number, Types> 
     return id;
   }
 
+  function encounterDOMNode(node: Node): number {
+    const found = m.get(node);
+    if (found) {
+      return found;
+    }
+
+    const id = heap.length;
+    m.set(node, id);
+
+    const serializer = new window.XMLSerializer();
+
+    const value = serializer.serializeToString(node);
+
+    heap.push({ type: 'domnode', value });
+
+    return id;
+  }
+
+  function encounterNodeList(nodeList: NodeList) {
+    const found = m.get(nodeList);
+    if (found) {
+      return found;
+    }
+
+    const id = heap.length;
+    m.set(nodeList, id);
+
+    const refArray: Array<number> = [];
+
+    heap.push({ type: 'nodelist', value: refArray });
+
+    Array.prototype.forEach.call(nodeList, (node: Node) => {
+      refArray.push(serializeValue(node));
+    });
+
+    return id;
+  }
+
+  function encounterHtmlCollection(collection: HTMLCollection) {
+    const found = m.get(collection);
+    if (found) {
+      return found;
+    }
+
+    const id = heap.length;
+    m.set(collection, id);
+
+    const refArray: Array<number> = [];
+
+    heap.push({ type: 'htmlcollection', value: refArray });
+
+    Array.prototype.forEach.call(collection, (node: Node) => {
+      refArray.push(serializeValue(node));
+    });
+
+    return id;
+  }
+
   function serializeValue(obj: unknown): number {
     switch (typeof obj) {
       case 'undefined': {
@@ -298,6 +356,18 @@ export default (entry: unknown, global: Global = window): Record<number, Types> 
 
         if (obj instanceof global.Array) {
           return encounterArr(obj);
+        }
+
+        if (obj instanceof global.Node) {
+          return encounterDOMNode(obj);
+        }
+
+        if (obj instanceof global.NodeList) {
+          return encounterNodeList(obj);
+        }
+
+        if (obj instanceof global.HTMLCollection) {
+          return encounterHtmlCollection(obj);
         }
 
         return encounterPlainObj(obj as Record<any, any>);

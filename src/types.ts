@@ -75,6 +75,9 @@ export type Types =
   | { type: 'number'; value: number }
   | { type: 'boolean'; value: boolean }
   | { type: 'bigint'; value: string }
-  | { type: 'null'; value: '' };
+  | { type: 'null'; value: '' }
+  | { type: 'domnode'; value: string }
+  | { type: 'nodelist'; value: Array<number> }
+  | { type: 'htmlcollection'; value: Array<number> };
 
 export type Global = Window & typeof globalThis;
