@@ -1,6 +1,6 @@
 {
   "name": "@replit/alcor",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Serialize javascript objects",
   "files": [
     "/dist"
